@@ -1,12 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config(); // 👈 FIRST load env
+require("dotenv").config();
 
 const app = express();
-
-// DEBUG (after dotenv)
-console.log("MONGO_URI:", process.env.MONGO_URI);
 
 // middleware
 app.use(cors());
@@ -18,8 +15,13 @@ app.get("/", (req, res) => {
 });
 
 // routes
-const projectRoutes = require("./routes/projectRoutes");
+const projectRoutes = require("./projectRoutes"); 
 app.use("/api/projects", projectRoutes);
+
+// MongoDB check (safe debugging)
+if (!process.env.MONGO_URI) {
+    console.log("❌ MONGO_URI missing in environment variables");
+}
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
